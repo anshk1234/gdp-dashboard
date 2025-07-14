@@ -2,12 +2,36 @@ import streamlit as st
 import pandas as pd
 import math
 from pathlib import Path
+import time
+import json
+from streamlit_lottie import st_lottie
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
     page_title='GDP dashboard',
     page_icon=':earth_americas:', # This is an emoji shortcode. Could be a URL too.
 )
+
+# --- Splash Animation ---
+def load_lottiefile(filepath):
+    with open(filepath, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+if "show_intro" not in st.session_state:
+    st.session_state.show_intro = True
+
+if st.session_state.show_intro:
+    lottie_intro = load_lottiefile("analytic.json")
+    
+    splash = st.empty()
+    with splash.container():
+        st.markdown("<h1 style='text-align:center;'>Welcome to GDP dashboard!</h1>", unsafe_allow_html=True)
+        st_lottie(lottie_intro, height=400, speed=1.0, loop=False)
+        time.sleep(2.5)
+    splash.empty()
+    st.session_state.show_intro = False
+
+
 
 # -----------------------------------------------------------------------------
 # Declare some useful functions.
